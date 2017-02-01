@@ -1,0 +1,32 @@
+{
+  "name": "final",
+  "version": "0.0.1",
+  "description": "video chat application",
+  "main": "server.js",
+  "scripts": {
+    "test": "node server.js",
+    "start": "node server.js"
+  },
+
+    "engines": {
+    "node": "6.9.2"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pranayyelugam/webrtc.git"
+  },
+  "keywords": [
+    "webrtc",
+    "peerjs"
+  ],
+  "author": "Pranay Yelugam",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pranayyelugam/webrtc/issues"
+  },
+  "homepage": "https://github.com/pranayyelugam/webrtc#readme",
+  "dependencies": {
+    "express": "^4.14.1",
+    "peer": "^0.2.8"
+  }
+}

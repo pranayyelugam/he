@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>hee</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/peerjs/0.3.14/peer.min.js"></script>
+<!-- <script type="application/javascript" src="/main.js"></script> -->
+
+
+
+<script type="text/javascript">
+	
+	
+		
+
+	var peerId
+	var conn
+		//NEW PEER
+  		peer = new Peer('', {
+			host: location.hostname,
+			port: location.port || (location.protocol === 'https:' ? 443 : 80),
+			path: '/peerjs',
+			debug: 3
+		})
+		//PEER ID
+		peer.on('open', function(id) {
+			$('#pid').text(id)
+		})
+		peer.on('error', function(err) {
+			alert(''+err)
+		})
+
+		//RECEIVING END
+		var n = navigator;
+		n.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+		peer.on('call', function(call) {
+  		n.getUserMedia({video: true, audio: true}, function(stream) {
+    	call.answer(stream);
+		call.on('stream', function(stream) {
+
+     		var video = document.createElement('video')
+    		document.body.appendChild(video)
+			video.src = window.URL.createObjectURL(stream)
+    		video.play()
+      	
+      	});
+ 		}, function(err) {
+   		 console.log('Failed to get local stream' ,err);
+  			});
+		});
+
+
+		$(document).ready(function(){
+			$('#connect').click(function(){
+				//TRANSMITTER END
+				n.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+				n.getUserMedia({video: true, audio: true}, function(stream) {
+  				var call = peer.call($('#rid').val(), stream);
+  				call.on('stream', function(stream) {
+				var video = document.createElement('video')
+    			document.body.appendChild(video)
+				video.src = window.URL.createObjectURL(stream)
+    			video.play()
+      
+  			});
+			}, function(err) {
+  				console.log('Failed to get local stream' ,err);
+				});
+			})
+		})
+		//HACK FOR HEROKU
+		function ping() {
+			console.log(peer)
+			peer.socket.send({
+				type: 'ping'
+			})
+			setTimeout(ping, 16000)
+		}
+		ping()
+
+
+
+	
+
+ 
+</script>
+
+your peer id :<span id ="pid"></span><br><br>
+	contact to peer: <input type="text" id="rid" name="">
+	<input type="button" name="" value="Connect" id="connect">
+	
+
+</body>
+
+</html>
